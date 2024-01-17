@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Modal  from "react-modal";
-
+import {ToastContainer} from "react-toastify";
+import "react-toastify/ReactToastify.css"
 import Sidebar from "../components/Sidebar";
 import Resumen from "../components/Resumen";
 import useQuiosco from "../hooks/useQuiosco";
@@ -21,7 +22,7 @@ Modal.setAppElement('#root');
 
 export default function layout() {
 
-  const {modal, handleClickModal} = useQuiosco();
+  const { modal } = useQuiosco();
 
   return (
   <>    
@@ -39,6 +40,7 @@ export default function layout() {
       <Modal isOpen={modal} style={customStyles}>
         <ModalProducto></ModalProducto>
       </Modal>
+      <ToastContainer/>
   </>
   )
 }
