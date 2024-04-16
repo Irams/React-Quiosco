@@ -8,12 +8,17 @@ export default function Inicio() {
   
   const {categoriaActual} = useQuiosco();
   const {user} = useAuth ({middleware: 'auth'});
+  const token = localStorage.getItem('AUTH_TOKEN')
 
   //Consulta SWR
-  const fetcher = () => clienteAxios('/api/productos').then(data => data.data)
+  const fetcher = () => clienteAxios('/api/productos', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then(data => data.data)
   const { data, error, isLoading } = useSWR('/api/productos', fetcher, {
     // Este refresh busca cambios cada segundo y los refleja en el frontend
-    refreshInterval: 1000
+    refreshInterval: 500
   })
 
   // console.log(data);
@@ -34,15 +39,18 @@ export default function Inicio() {
   return (
     <>
       <h1 className="text-4xl font-black">{categoriaActual.nombre}</h1>
-      <p className="text-2xl my-10">¡Hola {user.name} es un gusto recibirte! elije y personaliza tu pedido a continuación</p>
+      <p className="text-2xl my-10">¡Hola {user?.name} es un gusto recibirte! elije y personaliza tu pedido a continuación</p>
+
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {productos.map(producto =>(
           <Producto
             key={producto.imagen}
             producto={producto}
+            botonAgregar={true}
           />
         ))}
       </div>
+
     </>
   )
 }
